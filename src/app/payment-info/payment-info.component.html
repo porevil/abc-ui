@@ -1,0 +1,45 @@
+<mat-card class="example-card">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title>รายการชำระค่าสินค้าและบริการ</mat-card-title>
+    <mat-card-subtitle>แจ้งยอดเงินหักยอดชำระค่าสินค้าและบริการ และออมเงิน</mat-card-subtitle>
+  </mat-card-header>
+    
+    
+   
+  <mat-card-content>
+    <table width="100%" border="0">
+      <tr><td colspan="2"><b>ข้อมูลผู้ชำระค่าสินค้าและบริการ</b></td></tr>
+      <tr><td align="left">email :</td><td align="right" id="email">{{pay.email}}</td></tr>
+      <tr><td align="left">หมายเลขโทรศัพท์ :</td><td align="right" id="mobileNo">{{pay.mobileNo}}</td></tr>
+      <tr><td colspan="2" align="center">-----------------------------------------------------</td></tr>
+      <tr><td align="left">ชำระค่าสินค้าและบริการ :</td><td align="right" id="mercCode">{{pay.billInfo.mercCode}} {{pay.billInfo.mercDesc}}</td></tr>
+      <tr><td align="left">เลขที่อ้างอิง/เลขที่สัญญา :</td><td align="right" id="billRefNo">{{pay.billInfo.billRefNo}}</td></tr>
+      <tr><td colspan="2">&nbsp;</td></tr>
+      <tr><td align="left">ยอดค่าสินค้าและบริการ :</td><td align="right" id="billAmt">{{pay.billInfo.billAmt| number:'1.2'}} บาท</td></tr>
+      <tr><td align="left"><font color="blue">ยอดชำระ :</font></td><td align="right"><font color="blue" id="billTotAmt">{{pay.billInfo.billAmt+pay.depositAmt| number:'1.2'}} บาท</font></td></tr>
+      <tr><td align="left">ยอดเงินออม :</td><td align="right" id="savingsAmt">{{pay.depositAmt}} บาท</td></tr>
+      <tr><td colspan="2" align="center">-----------------------------------------------------</td></tr>
+      <tr><td align="left">บัญชีเงินออม :</td><td align="right" id="savingsAcct">{{pay.savingAccountNo}}</td></tr>
+      <tr><td align="left">ชื่อบัญชี :</td><td align="right" id="savingsAcctNm">{{pay.accountName}}</td></tr>
+      <tr><td align="left">limit เงินออมสะสม :</td><td align="right" id="limitSavingsAcct">{{pay.limit| number:'1.2'}} บาท</td></tr>
+      <tr><td align="left">คงเหลือ limit ออมสะสม :</td><td align="right" id="remainSavingsAcct">{{pay.remainDepositAmt| number:'1.2'}} บาท</td></tr>
+      <tr><td colspan="2" align="center">-----------------------------------------------------</td></tr>
+      <div *ngIf="pay.payableStatus == 'N'; then alertNotPay"></div> 
+      <ng-template #alertNotPay>
+          <tr><td colspan="2" align="center"><font color="red">{{pay.payableReason}}</font></td></tr>
+      </ng-template>
+    </table>   
+  </mat-card-content>
+
+  <mat-card-actions>
+    <div align="center">
+        <div *ngIf="pay.payableStatus == 'Y'; then payButton"></div> 
+        <ng-template #payButton>
+            <button mat-button (click)="confirmPayment()" >  จ่าย</button>
+        </ng-template>
+        
+    <button mat-button [routerLink]="['/']"   >  ยกเลิก</button></div>
+
+  </mat-card-actions>
+</mat-card>

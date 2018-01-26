@@ -1,0 +1,20 @@
+  
+  .example-header-image {
+    background-image: url('https://eservice.mea.or.th/meaeservice/picMEA/MEA_new_color.png');
+    background-size: cover;
+  }
+
+  .example-button-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  .example-card {
+    width: 300px;
+    background-color: white;
+    color:  #999999;
+
+  }
+
+

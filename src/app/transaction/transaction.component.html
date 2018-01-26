@@ -1,0 +1,24 @@
+
+
+<mat-card class="example-card">
+    <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>รายการชำระค่าสินค้าและบริการ</mat-card-title>
+        <mat-card-subtitle></mat-card-subtitle>
+      </mat-card-header>
+    <mat-card-content>
+        <table width="100%" border="0">
+            <tr><td colspan="2">  Transaction Id  {{refId}}  Completed</td></tr>
+           
+          </table>
+  
+    </mat-card-content>
+    <mat-card-actions>
+      <div align="center"> 
+          <br>
+          <button mat-raised-button color="primary" [routerLink]="['/']" >Ok</button>
+
+     </div>
+    </mat-card-actions>
+  </mat-card>
+  

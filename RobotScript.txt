@@ -1,0 +1,175 @@
+*** Settings ***
+Documentation               A test suite containing tests related to pay bill application
+...                         Created By Pongsarkorn C
+Library                     Selenium2Library
+Library                     OperatingSystem
+Suite Setup			            Run Keywords	PrepareURL
+...				                  OpenChrome
+Suite Teardown		          Close Browser After Finish
+Test Setup			            Go to 	${URL}
+
+*** Variables ***
+${URL}                      http://159.89.203.213:8080/abc
+${Browser}                  chrome
+${DELAY}                    0
+
+
+
+*** Keywords ***
+PrepareURL
+         ${env}=   Get Environment Variable   env  default=NONE
+         log to console  RUN IN ${env} environment
+         Run keyword if   '${env}' == 'JENKINS'     SetJENKINSURL
+         ...    ELSE     SetLocalURL
+
+SetJENKINSURL
+        ${URL}=         Set Variable    http://159.89.203.213:8080/abc
+        Set Global Variable     ${URL}
+
+SetLocalURL
+        ${URL}=         Set Variable    http://159.89.203.213:8080/abc    #http://localhost:4200/abc
+        Set Global Variable     ${URL}
+
+
+
+OpenChrome
+         ${env}=   Get Environment Variable   env  default=NONE
+         log to console  RUN IN ${env} environment
+         Run keyword if   '${env}' == 'JENKINS'     OpenHeadlessChrome
+         ...   ELSE  OpenNormalChrome
+
+OpenNormalChrome
+         Open browser  about:  chrome
+         #open browser            ${URL}      ${Browser}
+         #Set Selenium Speed      ${DELAY}
+
+OpenHeadlessChrome
+         ${chrome_options} =     Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
+         Call Method    ${chrome_options}   add_argument    headless
+         Call Method    ${chrome_options}   add_argument    disable-gpu
+         ${options}=     Call Method     ${chrome_options}    to_capabilities
+         Create Webdriver    Chrome    chrome_options=${chrome_options}
+
+Close Browser After Finish
+    close browser
+
+Click Ref 1
+    Wait Until Element Is Visible       xpath=/html/body/app-root/app-service-catalog/mat-card/mat-card-actions/div/button[1]
+    Click Element                       xpath=/html/body/app-root/app-service-catalog/mat-card/mat-card-actions/div/button[1]
+
+Bill Show Ref 1 Data
+    wait until page contains          MR.Wachirakorn Sabuydee
+    #Element Text Should Be            xpath=//*[@id="mercCode"]                 MEA การไฟฟ้านครหลวง
+    #Element Text Should Be            xpath=//*[@id="billRefNo"]                1234567891
+    #Element Text Should Be            xpath=//*[@id="billAmt"]                  1,250.53 บาท
+    #Element Text Should Be            xpath=//*[@id="billTotAmt"]               1,300.00 บาท
+    #Element Text Should Be            xpath=//*[@id="savingsAmt"]               49.47 บาท
+    #Element Text Should Be            xpath=//*[@id="savingsAcct"]              10000000000001
+    #Element Text Should Be            xpath=//*[@id="limitSavingsAcct"]         5,000.00 บาท
+    #Element Text Should Be            xpath=//*[@id="remainSavingsAcct"]        4,950.53 บาท
+    Page Should Contain Element       xpath=/html/body/app-root/app-payment-info/mat-card/mat-card-actions/div/button[1]
+
+Click Ref 2
+    Wait Until Element Is Visible       xpath=/html/body/app-root/app-service-catalog/mat-card/mat-card-actions/div/button[2]
+    Click Element                       xpath=/html/body/app-root/app-service-catalog/mat-card/mat-card-actions/div/button[2]
+
+Bill Show Ref 2 Data
+    wait until page contains          MR.Wachirakorn Sabuydee
+    #Element Text Should Be            xpath=//*[@id="mercCode"]                 MEA การไฟฟ้านครหลวง
+    #Element Text Should Be            xpath=//*[@id="billRefNo"]                1234567892
+    #Element Text Should Be            xpath=//*[@id="billAmt"]                  1,250.53 บาท
+    #Element Text Should Be            xpath=//*[@id="billTotAmt"]               1,300.00 บาท
+    #Element Text Should Be            xpath=//*[@id="savingsAmt"]               49.47 บาท
+    #Element Text Should Be            xpath=//*[@id="savingsAcct"]              10000000000001
+    #Element Text Should Be            xpath=//*[@id="limitSavingsAcct"]         5,000.00 บาท
+    #Element Text Should Be            xpath=//*[@id="remainSavingsAcct"]        4,950.53 บาท
+    Page Should Contain Element       xpath=/html/body/app-root/app-payment-info/mat-card/mat-card-actions/div/button[1]
+
+Click Ref 3
+    Wait Until Element Is Visible       xpath=/html/body/app-root/app-service-catalog/mat-card/mat-card-actions/div/button[3]
+    Click Element                       xpath=/html/body/app-root/app-service-catalog/mat-card/mat-card-actions/div/button[3]
+
+Bill Show Ref 3 Data
+    wait until page contains          MR.Manop Deejai
+    #Element Text Should Be            xpath=//*[@id="mercCode"]                 MEA การไฟฟ้านครหลวง
+    #Element Text Should Be            xpath=//*[@id="billRefNo"]                1234567893
+    #Element Text Should Be            xpath=//*[@id="billAmt"]                  1,250.53 บาท
+    #Element Text Should Be            xpath=//*[@id="billTotAmt"]               1,300.00 บาท
+    #Element Text Should Be            xpath=//*[@id="savingsAmt"]               49.47 บาท
+    #Element Text Should Be            xpath=//*[@id="savingsAcct"]              10000000000003
+    #Element Text Should Be            xpath=//*[@id="limitSavingsAcct"]         5,000.00 บาท
+    #Element Text Should Be            xpath=//*[@id="remainSavingsAcct"]        4,950.53 บาท
+    Element Text Should Be            xpath=/html/body/app-root/app-payment-info/mat-card/mat-card-content/table/tbody/tr[17]/td/font   Your account balance cannot afford bill payment.
+
+Click Ref 4
+    Wait Until Element Is Visible       xpath=/html/body/app-root/app-service-catalog/mat-card/mat-card-actions/div/button[4]
+    Click Element                       xpath=/html/body/app-root/app-service-catalog/mat-card/mat-card-actions/div/button[4]
+
+Bill Show Ref 4 Data
+    wait until page contains          MR.Sayan Baimai
+    #Element Text Should Be            xpath=//*[@id="mercCode"]                 MEA การไฟฟ้านครหลวง
+    #Element Text Should Be            xpath=//*[@id="billRefNo"]                1234567894
+    #Element Text Should Be            xpath=//*[@id="billAmt"]                  2,500.00 บาท
+    #Element Text Should Be            xpath=//*[@id="billTotAmt"]               2,500.00 บาท
+    #Element Text Should Be            xpath=//*[@id="savingsAmt"]               0 บาท
+    #Element Text Should Be            xpath=//*[@id="savingsAcct"]              10000000000004
+    #Element Text Should Be            xpath=//*[@id="limitSavingsAcct"]         5,000.00 บาท
+    #Element Text Should Be            xpath=//*[@id="remainSavingsAcct"]        5,000.00 บาท
+    Page Should Contain Element       xpath=/html/body/app-root/app-payment-info/mat-card/mat-card-actions/div/button[1]
+
+Click Ref 5
+    Wait Until Element Is Visible       xpath=/html/body/app-root/app-service-catalog/mat-card/mat-card-actions/div/button[5]
+    Click Element                       xpath=/html/body/app-root/app-service-catalog/mat-card/mat-card-actions/div/button[5]
+
+Bill Show Ref 5 Data
+    wait until page contains          MRS.Somying Jingjai
+    #Element Text Should Be            xpath=//*[@id="mercCode"]                 MEA การไฟฟ้านครหลวง
+    #Element Text Should Be            xpath=//*[@id="billRefNo"]                1234567895
+    #Element Text Should Be            xpath=//*[@id="billAmt"]                  1,200.00 บาท
+    #Element Text Should Be            xpath=//*[@id="billTotAmt"]               1,200.00 บาท
+    #Element Text Should Be            xpath=//*[@id="savingsAmt"]               0 บาท
+    #Element Text Should Be            xpath=//*[@id="savingsAcct"]              10000000000005
+    #Element Text Should Be            xpath=//*[@id="limitSavingsAcct"]         5,000.00 บาท
+    #Element Text Should Be            xpath=//*[@id="remainSavingsAcct"]        5,000.00 บาท
+    Page Should Contain Element       xpath=/html/body/app-root/app-payment-info/mat-card/mat-card-actions/div/button[1]
+
+Click Ref 6
+    Wait Until Element Is Visible       xpath=/html/body/app-root/app-service-catalog/mat-card/mat-card-actions/div/button[6]
+    Click Element                       xpath=/html/body/app-root/app-service-catalog/mat-card/mat-card-actions/div/button[6]
+
+Bill Show Ref 6 Data
+    wait until page contains          MRS.Somchai Naja
+    #Element Text Should Be            xpath=//*[@id="mercCode"]                 MEA การไฟฟ้านครหลวง
+    #Element Text Should Be            xpath=//*[@id="billRefNo"]                1234567896
+    #Element Text Should Be            xpath=//*[@id="billAmt"]                  1,250.53 บาท
+    #Element Text Should Be            xpath=//*[@id="billTotAmt"]               1,300.00 บาท
+    #Element Text Should Be            xpath=//*[@id="savingsAmt"]               49.47 บาท
+    #Element Text Should Be            xpath=//*[@id="savingsAcct"]              10000000000005
+    #Element Text Should Be            xpath=//*[@id="limitSavingsAcct"]         500.00 บาท
+    #Element Text Should Be            xpath=//*[@id="remainSavingsAcct"]        401.06 บาท
+    Page Should Contain Element       xpath=/html/body/app-root/app-payment-info/mat-card/mat-card-actions/div/button[1]
+
+*** Test Cases ***
+Test Case: Normal
+    Click Ref 1
+    Bill Show Ref 1 Data
+
+Test Case: Duplicate Payment
+    Click Ref 2
+    Bill Show Ref 2 Data
+
+Test Case: Insufficient Balance
+    Click Ref 3
+    Bill Show Ref 3 Data
+
+Test Case: Payment amount=bill amount
+    Click Ref 4
+    Bill Show Ref 4 Data
+
+Test Case: Insufficient for Saving
+    Click Ref 5
+    Bill Show Ref 5 Data
+
+Test Case: Over Savings Limit
+    Click Ref 6
+    Bill Show Ref 6 Data
